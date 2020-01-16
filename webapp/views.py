@@ -5,19 +5,24 @@ import re
 import datetime
 
 # Packages
+import bleach
 import feedparser
 import flask
 from canonicalwebteam.blog import BlogViews
 from canonicalwebteam.blog.flask import build_blueprint
 from geolite2 import geolite2
+from mistune import Markdown
 from requests.exceptions import HTTPError
 
 # Local
 from webapp import auth
 from webapp.api import advantage as advantage_api
+from webapp.database import db_session
+from webapp.models import Notice
 
 
 ip_reader = geolite2.reader()
+markdown_parser = Markdown(parse_block_html=True, parse_inline_html=True)
 
 
 def download_thank_you(category):
@@ -222,3 +227,32 @@ def blog_press_centre():
     )
 
     return flask.render_template("blog/press-centre.html", **context)
+
+
+# USN
+# ===
+
+
+def notice(notice_id):
+    notice = db_session.query(Notice).get(notice_id)
+
+    if not notice:
+        flask.abort(404)
+
+    notice_context = {
+        "title": bleach.clean(notice.title),
+        "published": notice.published.strftime("%d %B %Y"),
+        "summary": markdown_parser(bleach.clean(notice.summary)),
+        "details": markdown_parser(bleach.clean(notice.details)),
+        "instructions": markdown_parser(bleach.clean(notice.instructions)),
+        "packages": notice.packages,
+        "releases": notice.releases,
+    }
+
+    return flask.render_template("security/notice.html", notice=notice_context)
+
+
+def notices():
+    notices = db_session.query(Notice).all()
+
+    return flask.render_template("security/notices.html", notices=notices)
