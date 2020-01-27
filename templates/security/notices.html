@@ -3,11 +3,100 @@
 {% block title %}Security notices{% endblock %}
 
 {% block content %}
-  <div class="p-strip">
-  {% for notice in notices %}
-    <div class="row">
-      <a href="/security/notices/{{notice.id}}">{{notice.id}}: {{notice.title}}</a>
+<section class="p-strip--suru-topped">
+  <div class="row">
+    <div class="col-8">
+	    <h1>Ubuntu Security Notices</h1>
+      <p>Developers issue an Ubuntu Security Notice when a security issue is fixed in an <a href="#">official Ubuntu package</a>.</p>
+      <p>To report a security vulnerability in an Ubuntu package, please <a href="#">contact the Security Team</a>.</p>
     </div>
-  {% endfor %}
   </div>
+</section>
+
+<section class="p-strip--light is-shallow">
+  <div class="u-fixed-width">
+    <h2>Search</h2>
+  </div>
+
+  <form action="/security/notices" method="GET" class="row">
+    <div class="col-4">
+      <label for="release">Release:</label>
+      <select name="release" id="release">
+        <option value="all" selected="">Any</option>
+        <option value="1">Cosmic Cuttlefish</option>
+        <option value="2">Bionic Beaver</option>
+        <option value="3">Xenial Xerus</option>
+      </select>
+    </div>
+
+    <div class="col-5">
+      <div class="row">
+        <div class="col-5">
+          <label for="details">Details contain:</label>
+        </div>
+
+        <div class="col-4">
+          <input type="text" name="details" id="details" />
+        </div>
+  
+        <div class="col-1">
+          <button type="submit" class="p-button--positive" disabled>Search</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</section>
+
+<section class="p-strip">
+  <div class="row">
+    <div class="col-9">
+      <h2>Latest notices</h2>
+
+      {% include "security/_notice-brief.html" %}
+      {% include "security/_notice-brief.html" %}
+      {% include "security/_notice-brief.html" %}
+      {% include "security/_notice-brief.html" %}
+    </div>
+
+    <div class="col-3">
+      <div class="p-card">
+        <h2 class="p-heading--four">Subscribe</h2>
+
+        <ul class="p-list u-no-margin--bottom">
+          <li class="p-list__item u-sv1">
+            <a href="#" style="display: flex; align-items: center;">
+              <i class="p-icon--rss" style="margin-right: 0.5rem; flex-shrink: 0;"></i>
+              RSS
+            </a>
+          </li>
+
+          <li class="p-list__item">
+            <a href="#" style="display: flex; align-items: center;">
+              <i class="p-icon--email" style="margin-right: 0.5rem; flex-shrink: 0;"></i>
+              Mailing list
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="u-fixed-width">
+    <hr class="p-separator" />
+  </div>
+
+  <div class="row">
+    <div class="col-9">
+      <h2>Featured</h2>
+
+      {% include "security/_notice-brief.html" %}
+      {% include "security/_notice-brief.html" %}
+      {% include "security/_notice-brief.html" %}
+      {% include "security/_notice-brief.html" %}
+    </div>
+  </div>
+</section>
+
+{% with first_item="_security_discussion", second_item="_security_esm", third_item="_security_further_reading" %}{% include "shared/contextual_footers/_contextual_footer.html" %}{% endwith %}
+
 {% endblock %}
