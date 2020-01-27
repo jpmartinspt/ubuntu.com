@@ -29,7 +29,7 @@
       </select>
     </div>
 
-    <div class="col-5">
+    <div class="col-6">
       <div class="row">
         <div class="col-5">
           <label for="details">Details contain:</label>
@@ -39,8 +39,8 @@
           <input type="text" name="details" id="details" />
         </div>
   
-        <div class="col-1">
-          <button type="submit" class="p-button--positive" disabled>Search</button>
+        <div class="col-2">
+          <button type="submit" class="p-button--positive" disabled>Search{% if request.args %} again{% endif %}</button>
         </div>
       </div>
     </div>
@@ -52,10 +52,9 @@
     <div class="col-9">
       <h2>Latest notices</h2>
 
-      {% include "security/_notice-brief.html" %}
-      {% include "security/_notice-brief.html" %}
-      {% include "security/_notice-brief.html" %}
-      {% include "security/_notice-brief.html" %}
+      {% for notice in notices %}
+        {% include "security/_notice-brief.html" %}
+      {% endfor %}
     </div>
 
     <div class="col-3">
@@ -88,11 +87,6 @@
   <div class="row">
     <div class="col-9">
       <h2>Featured</h2>
-
-      {% include "security/_notice-brief.html" %}
-      {% include "security/_notice-brief.html" %}
-      {% include "security/_notice-brief.html" %}
-      {% include "security/_notice-brief.html" %}
     </div>
   </div>
 </section>
