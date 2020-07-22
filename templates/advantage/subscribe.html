@@ -9,6 +9,28 @@
   {% include "advantage/_ubuntu_version_select.html" %}
   {% include "advantage/_cart.html" %}
   
+  <section class="p-strip--suru-topped js-cart">
+    <div class="row">
+      <h1 class="p-heading--4">Your subscriptions so far:</h1>    
+    </div>
+    <div class="js-cart-lines">
+    </div>
+    <div class="row"><hr class="u-no-margin--bottom" /></div>
+    <div class="row" style="padding-top: 20px; padding-bottom: 20px;">
+      <div class="col-8">
+        <h2 class="p-heading--5">Subtotal:</h2>
+      </div>
+      <div class="col-2">
+        <h2 class="p-heading--5" class="js-subtotal">$0</h2>
+      </div>
+      <div class="col-2 u-align--right">
+        <a class="p-button--positive" href="">Buy now</a>
+      </div>
+    </div>
+    <div class="row">
+      <span>If you have existing subscription or sales offers, <a href="/login">sign in</a> to see them.</span>
+    </div>
+  </section>
   <div class="p-strip">
     <div class="row">
       <div class="col-12 u-align--center">
@@ -19,7 +41,6 @@
             <label for="quantity_one">Quantity:</label>
             <input type="number" data-product="{{listing.product.id}}" name="quantity_{{listing.product.id}}" value="10" data-unit-price="{{listing.price.value}}"/>
           {% endfor %}
-
           <a
             href="#ua-payment-modal"
             id="showModal"
@@ -31,4 +52,47 @@
     </div>
   </div>
   {% include 'advantage/_stripe-modal.html' %}
+  
+  <script>
+    function addCartLine(id, name, price, quantity) {
+      var cart = document.querySelector(".js-cart");
+      var cartLines = cart.querySelector(".js-cart-lines");
+      var cartLineTemplate = `
+        <div class="row" ><hr class="u-no-margin--bottom" /></div>
+        <div class="row u-vertically-center js-cart-line-${id}" style="padding-top: 20px; padding-bottom: 20px;">
+          <div class="col-6">
+            <span style="font-size: 16px; font-weight: bold;">${name}</span>
+          </div>
+          <div class="col-2">
+            <input class="is-dense" type="text" value="${quantity}" />
+          </div>
+          <div class="col-2">
+            <span>$${price}</span>
+          </div>
+          <div class="col-2 u-align--right">
+            <button class="p-button is-dense" onclick="removeCartLine(${id});">Remove</button>
+          </div>
+        </div>
+      `
+      var cartLine = document.querySelector(".js-cart-line-" + id);
+      if (cartLine) {
+        var quantityInput = cartLine.querySelector("input");
+        quantityInput.value = quantity;
+      } else {
+        cartLines.innerHTML += cartLineTemplate;
+      }
+
+      cart.classList.remove("u-hide");
+    }
+
+    function removeCartLine(id) {
+      var cartLine = document.querySelector(".js-cart-line-" + id);
+      cartLine.remove();
+    }
+
+    function updateSubtotal(value) {
+      var subtotal = document.querySelector(".js-subtotal");
+      subtotal.get
+    }
+  </script>
 {% endblock %}
